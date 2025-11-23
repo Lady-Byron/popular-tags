@@ -20,30 +20,36 @@ ul.poptag-ul {
 }
 
 li.poptag-li {
-  // 1. 颜色调整
+  // 1. 使用 Flarum 主色调变量
   background: @primary-color;
-  color: #ffffff;
   
-  // 2. 胶囊化，但保持紧凑
-  border-radius: 50px; // 彻底的胶囊圆角
-  padding: 3px 10px;   // 稍微增加左右内边距，上下保持紧凑
+  // [修复] Flarum 没有 @text-color-dark 变量，
+  // 在主色调背景上，直接使用纯白文字是最标准的做法。
+  color: #ffffff; 
   
-  // 3. 字体微调
+  // 2. 现代化外观
+  padding: 4px 12px;
+  border-radius: 20px;
   text-align: center;
-  font-size: 0.9em;    // 字体清晰一点
+  font-size: 0.85em;
   font-weight: 600;
   
-  // 防止换行
-  white-space: nowrap;
-  
-  // 交互效果
-  cursor: pointer;
+  // 3. 增加微立体感
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
-  
+
+  cursor: pointer;
+
+  // 4. 悬停效果
   &:hover {
-    background: lighten(@primary-color, 10%);
+    background: lighten(@primary-color, 10%); // 悬停时稍微变亮
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 }
+
+.popular-tags-link {
+  text-decoration: none;
 
 .popular-tags-link {
   text-decoration: none;
