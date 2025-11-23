@@ -4,7 +4,7 @@ import getTags from '../helpers/getTags';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import Link from 'flarum/common/components/Link';
 
-export default class MyWidget extends Widget {
+export default class PopularTags extends Widget {
   oninit(vnode) {
     super.oninit(vnode);
     this.loading = true;
@@ -12,10 +12,27 @@ export default class MyWidget extends Widget {
 
   oncreate(vnode) {
     super.oncreate(vnode);
+
+    // [修复虚化]：给父容器加标记，以便在 CSS 中移除遮罩
+    if (vnode.dom && vnode.dom.parentNode) {
+      vnode.dom.parentNode.classList.add('popular-tags-wrapper-fix');
+    }
+    
     const showedTags = app.forum.attribute('justoverclock-popular-tags.numberOfTags') || 4;
-    const url = app.forum.attribute('baseUrl') + '/api/tags';
+    
+    // 性能优化：
+    // 1. 直接让 API 按热门程度排序 (sort=-discussionCount)
+    // 2. 多取 3 倍的数据，防止因用户屏蔽导致显示数量不足
+    const fetchLimit = showedTags * 3;
+    const url = app.forum.attribute('baseUrl') + `/api/tags?sort=-discussionCount&page[limit]=${fetchLimit}`;
+
     getTags(url).then((res) => {
-      this.popularTags = res.slice(0, showedTags);
+      // 核心功能：过滤掉 "hide" 状态的标签
+      const visibleTags = res.filter((tag) => {
+        return tag.attributes.subscription !== 'hide';
+      });
+
+      this.popularTags = visibleTags.slice(0, showedTags);
       this.loading = false;
       m.redraw();
     });
