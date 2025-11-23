@@ -13,6 +13,12 @@ export default class PopularTags extends Widget {
   oncreate(vnode) {
     super.oncreate(vnode);
     const showedTags = app.forum.attribute('justoverclock-popular-tags.numberOfTags') || 4;
+
+    // [新增]：修复右侧虚化问题
+    // 找到父级容器 (.AfruxWidgets-Widget-content)，给它加个标记类
+    if (vnode.dom && vnode.dom.parentNode) {
+      vnode.dom.parentNode.classList.add('popular-tags-wrapper-fix');
+    }
     
     // [性能优化]
     // 1. sort=-discussionCount: 让数据库直接返回最热门的标签，而不是获取随机20个在前端排序。
