@@ -1,61 +1,45 @@
-// 1. [核心修复] 针对父容器的样式覆盖
-// 这个类名是我们刚才在 JS 里动态添加的
-.popular-tags-wrapper-fix {
-  // 移除恼人的右侧虚化/渐变遮罩
-  mask-image: none !important;
-  -webkit-mask-image: none !important;
-  
-  // 允许内容完整显示，防止被裁切
-  overflow: visible !important;
-  
-  // 增加容器内边距，让标签不要贴着边缘
-  padding: 15px !important; 
-}
-
+// 保持原有的容器结构不变
 ul.poptag-ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap; // 确保自动换行
-  
-  // [优化] 增大间距：从 8px -> 10px
-  // 这样标签之间会有更多呼吸空间
-  gap: 10px; 
-  
-  width: 100%;
+  flex-wrap: wrap;
+  width: fit-content;
 }
 
 li.poptag-li {
+  // --- 核心改动区域 ---
+  
+  // 1. 颜色调整：使用 Flarum 主色调
   background: @primary-color;
-  color: #ffffff; 
+  // 确保文字在主色调背景上为白色
+  color: #ffffff;
+
+  // 2. 胶囊化调整
+  // 将圆角设为很大的值，确保两端是半圆
+  border-radius: 50px; 
+  // 稍微增加横向内边距，让它看起来更像一个胶囊 (原为 0.5rem)
+  padding: 0.5rem 1rem; 
+
+  // --- 保持原样区域 ---
+  // 依然使用 margin 来控制间距（维持原有布局形式）
+  margin: 10px;
   
-  // [优化] 增大胶囊内边距
-  // 上下 6px，左右 14px (原为 4px/12px)
-  padding: 6px 14px; 
-  
-  border-radius: 20px;
   text-align: center;
-  font-size: 0.9em; // 稍微加大一点字体
-  font-weight: 600;
-  
-  // 防止长标签在中间换行，保持胶囊形状
-  white-space: nowrap;
-  
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-
+  // 保持原有的小字体 (如果你想大一点，可以改成 0.9em)
+  font-size: 11px; 
+  width: fit-content;
   cursor: pointer;
+  transition: background 0.2s ease;
 
+  // 悬停效果：基于主色调变亮
   &:hover {
     background: lighten(@primary-color, 10%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 }
 
 .popular-tags-link {
+  // 链接文字颜色继承自 li，只需去掉下划线
   text-decoration: none;
-  // 确保链接包裹元素行为正常
-  display: inline-block;
 }
