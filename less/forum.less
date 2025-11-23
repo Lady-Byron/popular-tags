@@ -1,25 +1,51 @@
+// 1. [精准修复] 只移除遮罩，不改变容器大小
+.popular-tags-wrapper-fix {
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  // 移除 padding 设置，防止组件缩小
+}
+
 ul.poptag-ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  
   display: flex;
   flex-wrap: wrap;
-  width: fit-content;
+  
+  // 使用 gap 替代 margin，排列更整齐，但间距设小一点保持紧凑
+  gap: 6px; 
+  
+  width: 100%;
 }
+
 li.poptag-li {
+  // 1. 颜色调整
   background: @primary-color;
-  padding: 0.5rem;
-  border-radius: 10px;
+  color: #ffffff;
+  
+  // 2. 胶囊化，但保持紧凑
+  border-radius: 50px; // 彻底的胶囊圆角
+  padding: 3px 10px;   // 稍微增加左右内边距，上下保持紧凑
+  
+  // 3. 字体微调
   text-align: center;
-  font-size: 11px;
-  width: fit-content;
-  margin: 10px;
+  font-size: 0.9em;    // 字体清晰一点
+  font-weight: 600;
+  
+  // 防止换行
+  white-space: nowrap;
+  
+  // 交互效果
   cursor: pointer;
+  transition: all 0.2s ease;
+  
   &:hover {
-    background: #bc80f5;
+    background: lighten(@primary-color, 10%);
   }
 }
+
 .popular-tags-link {
-  color: white;
   text-decoration: none;
+  display: inline-block;
 }
