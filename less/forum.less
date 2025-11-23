@@ -1,37 +1,54 @@
+// 1. [核心修复] 针对父容器的样式覆盖
+// 这个类名是我们刚才在 JS 里动态添加的
+.popular-tags-wrapper-fix {
+  // 移除恼人的右侧虚化/渐变遮罩
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  
+  // 允许内容完整显示，防止被裁切
+  overflow: visible !important;
+  
+  // 增加容器内边距，让标签不要贴着边缘
+  padding: 15px !important; 
+}
+
 ul.poptag-ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: wrap; // 确保自动换行
+  
+  // [优化] 增大间距：从 8px -> 10px
+  // 这样标签之间会有更多呼吸空间
+  gap: 10px; 
+  
   width: 100%;
 }
 
 li.poptag-li {
-  // 1. 使用 Flarum 主色调变量
   background: @primary-color;
-  
-  // [修复] Flarum 没有 @text-color-dark 变量，
-  // 在主色调背景上，直接使用纯白文字是最标准的做法。
   color: #ffffff; 
   
-  // 2. 现代化外观
-  padding: 4px 12px;
+  // [优化] 增大胶囊内边距
+  // 上下 6px，左右 14px (原为 4px/12px)
+  padding: 6px 14px; 
+  
   border-radius: 20px;
   text-align: center;
-  font-size: 0.85em;
+  font-size: 0.9em; // 稍微加大一点字体
   font-weight: 600;
   
-  // 3. 增加微立体感
+  // 防止长标签在中间换行，保持胶囊形状
+  white-space: nowrap;
+  
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 
   cursor: pointer;
 
-  // 4. 悬停效果
   &:hover {
-    background: lighten(@primary-color, 10%); // 悬停时稍微变亮
+    background: lighten(@primary-color, 10%);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
@@ -39,4 +56,6 @@ li.poptag-li {
 
 .popular-tags-link {
   text-decoration: none;
+  // 确保链接包裹元素行为正常
+  display: inline-block;
 }
